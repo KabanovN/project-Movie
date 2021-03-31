@@ -1,76 +1,57 @@
-/* Задание на урок:
-1) У нас уже есть рабочее приложение, состоящее из отдельных функций. Представьте, что
-перед вами стоит задача переписать его так, чтобы все функции стали методами объекта personalMovieDB
-Такое случается в реальных продуктах при смене технологий или подхода к архитектуре программы
-2) Создать метод toggleVisibleMyDB, который при вызове будет проверять свойство privat. Если оно false - он
-переключает его в true, если true - переключает в false. Протестировать вместе с showMyDB.
-3) В методе writeYourGenres запретить пользователю нажать кнопку "отмена" или оставлять пустую строку. 
-Если он это сделал - возвращать его к этому же вопросу. После того, как все жанры введены - 
-при помощи метода forEach вывести в консоль сообщения в таком виде:
-"Любимый жанр #(номер по порядку, начиная с 1) - это (название из массива)"*/
+/*jshint esversion: 6 */
+/* Задания на урок:
 
-'use strict';
+1) Удалить все рекламные блоки со страницы (правая часть сайта)
 
-const personalMovieDB = {
-    count: 0,
-    movies: {},
-    actors: {},
-    genres: [],
-    privat: false,
+2) Изменить жанр фильма, поменять "комедия" на "драма"
 
-    start: function () {
-        personalMovieDB.count = +prompt('Сколько фильмов вы уже посмотрели?', '');
+3) Изменить задний фон постера с фильмом на изображение "bg.jpg". Оно лежит в папке img.
+Реализовать только при помощи JS
 
-        while (personalMovieDB.count == null || personalMovieDB.count == '' || isNaN(personalMovieDB.count)) {
-            personalMovieDB.count = +prompt('Сколько фильмов вы уже посмотрели?', '');
-        }
-    },
+4) Список фильмов на странице сформировать на основании данных из этого JS файла.
+Отсортировать их по алфавиту 
 
-    detectPersonalLevel: function () {
-        if (personalMovieDB.count < 10) {
-            alert('Просмотрено довольно мало фильмов');
-        } else if (personalMovieDB.count >= 10 && personalMovieDB.count <= 30) {
-            alert('Вы классический зритель');
-        } else if (personalMovieDB.count > 30) {
-            alert('Вы киноман');
-        } else {
-            alert('Произошла ошибка');
-        }
-    },
+5) Добавить нумерацию выведенных фильмов */
 
-    rememberMyFilms: function () {
-        for (let i = 0; i < 2; i++) {
-            let lastMovie = prompt('Один из последних просмотренных фильмов?', ''),
-                movieRating = prompt('На сколько оцените его?', '');
+"use strict";
 
-            if (lastMovie != '' && movieRating != '' && lastMovie != null && movieRating != null && lastMovie.length < 50) {
-                personalMovieDB.movies[lastMovie] = movieRating;
-            } else {
-                i--;
-            }
-        }
-    },
-
-    showMyDB: function () {
-        if (!personalMovieDB.privat) {
-            console.log(personalMovieDB);
-        }
-    },
-
-    toggleVisibleMyDB: function () {
-        return (personalMovieDB.privat) ? personalMovieDB.privat = false : personalMovieDB.privat = true;
-    },
-
-    writeYourGenres: function () {
-        for (let i = 0; i < 3; i++) {
-            personalMovieDB.genres[i] = prompt(`Ваш любимый жанр под номером ${i + 1}`);
-            if (personalMovieDB.genres[i] === null || personalMovieDB.genres[i] === '') {
-                i--;
-            }
-        }
-
-        personalMovieDB.genres.forEach((item, i) => {
-            console.log(`Любимый жанр ${i + 1} - это ${item}`);
-        });
-    }
+const movieDB = {
+    movies: [
+        "Логан",
+        "Лига справедливости",
+        "Ла-ла лэнд",
+        "Одержимость",
+        "Скотт Пилигрим против..."
+    ]
 };
+
+const promo = document.querySelector('.promo__content'),
+    adv = document.querySelectorAll('.promo__adv img'),
+    genre = promo.querySelector('.promo__genre'),
+    promoImage = promo.querySelector('.promo__bg'),
+    moviesList = promo.querySelector('.promo__interactive-list');
+
+adv.forEach(item => {
+    item.remove();
+});
+
+genre.textContent = 'Драма';
+
+promoImage.style.backgroundImage = 'url("img/bg.jpg")';
+
+movieDB.movies.sort();
+
+moviesList.innerHTML = '';
+
+movieDB.movies.forEach((film, i) => {
+    moviesList.innerHTML += `
+        <li class="promo__interactive-item">
+            ${i + 1}. ${film}
+            <div class="delete"></div>
+        </li>`
+});
+
+
+
+
+
